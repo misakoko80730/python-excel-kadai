@@ -1,0 +1,54 @@
+import openpyxl
+import datetime
+now = datetime.date.today().strftime("%Y/%m/%d")
+
+# 新しいワークブックを作成
+workbook = openpyxl.Workbook()
+sheet = workbook.active
+
+# 請求書を書き込む
+sheet.cell(row=1,column=1,value="請求書")
+# 会社情報を書き込む
+sheet.cell(row=3,column=1,value="株式会社ABC")
+sheet.cell(row=4,column=1,value="〒101-0022 東京都千代田区神田練塀町300")
+sheet.cell(row=5,column=1,value="TEL:03-1234-5678 FAX:03-1234-5678")
+sheet.cell(row=6,column=1,value="担当者名:鈴木一郎 様")
+sheet.cell(row=3,column=5,value="No.")
+sheet.cell(row=3,column=6,value="0001")
+sheet.cell(row=4,column=5,value="日付")
+sheet.cell(row=4,column=6,value=now)
+
+
+
+header = ["商品名", "数量", "単価", "金額"]
+sheet.append(header)
+
+# 表のデータを書き込む
+data = [
+    ["商品A", 2,10000,20000],
+    ["商品B", 1,15000,15000],
+    ["","","", 35000]
+]
+# for文でdataの各行をワークシートに追加する
+for row in data:
+    sheet.append(row)
+
+
+#合計等の情報を入力する
+data1 = [
+    ["合計", "","",35000],
+    ["消費税","","",15000],
+    ["税込合計","","",38500]
+]
+
+# for文でdataの各行をワークシートに追加する
+for row in data1:
+    sheet.append(row)
+
+# 指定した行に新しい行を挿入（7行目に空白行を2行挿入）
+sheet.insert_rows(7, 2)
+# 指定した行に新しい行を挿入（14行目に空白行を1行挿入）
+sheet.insert_rows(13,1)
+sheet.insert_rows(1,1)
+sheet.insert_cols(1,1)
+workbook.save("請求書_20240421.xlsx")
