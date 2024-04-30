@@ -1,0 +1,28 @@
+import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import PatternFill
+
+# pandasでExcelファイルを読み込む
+df1 = pd.read_excel('2022_年間売上表.xlsx', sheet_name='Sheet1')
+df2 = pd.read_excel('2023_年間売上表.xlsx', sheet_name='Sheet1')
+
+# データフレームを結合する
+df = pd.concat([df1, df2])
+
+# 商品別に「売上年」列の平均値を計算する
+result = df.groupby(['商品','売上年'])['金額（千円）'].sum()
+
+# pandasでExcelファイルに書き込む
+result.to_excel('売上集計表.xlsx')
+
+# openpyxlでExcelファイルを読み込む
+workbook = load_workbook('売上集計表.xlsx')
+sheet = workbook.active
+
+# A1~C1セルの背景色を赤色（##F2F2F2）に設定
+for row in sheet['A1':'C1']:
+    for cell in row:
+        cell.fill = PatternFill(patternType='solid', fgColor='F2F2F2')
+
+# Excelファイルを保存する
+workbook.save('売上集計表.xlsx')
